@@ -3,6 +3,7 @@ const AuthService = require("../services/auth");
 const validateSchema = require("../middlewares/validateSchema");
 const RegisterDTOSchema = require("../dtos/auth/register");
 const LoginDTOSchema = require("../dtos/auth/login");
+const status = require("http-status");
 
 
 function auth(app) {
@@ -15,14 +16,13 @@ function auth(app) {
     router.post("/register", validateSchema(RegisterDTOSchema), async (req, res) => {
         const result = await authService.register(req.body);
 
-        return res.status(result.success ? 201 : 400).json(result);
+        return res.status(result.success ? status.CREATED : status.BAD_REQUEST).json(result);
     });
 
     router.post("/login", validateSchema(LoginDTOSchema), async (req, res) => {
-        return res.json({
-            success: true,
-            message: "Login..."
-        });
+        const result = await authService.login(req.body);
+
+        return res.status(result.success ? status.ACCEPTED : status.UNAUTHORIZED).json(result);
     });
 }
 

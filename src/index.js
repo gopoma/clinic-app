@@ -8,6 +8,7 @@ const mongoSanitize = require("express-mongo-sanitize");
 const morgan = require("morgan");
 const helmet = require("helmet");
 const xss = require("xss-clean");
+const status = require("http-status");
 
 const { development, port } = require("./config");
 const auth = require("./routes/auth");
@@ -64,7 +65,7 @@ app.get("/", (req, res) => {
 auth(app);
 
 app.all("*", (req, res) => {
-    return res.status(404).json({
+    return res.status(status.NOT_FOUND).json({
         success: false,
         messages: [`No se pudo encontrar ${req.originalUrl} en este servidor!`]
     });

@@ -17,6 +17,12 @@ class UserService {
             return handleDBExceptions(error);
         }
     }
+
+    async getByIdentificacion(identificacion) {
+        const user = await UsuarioModel.findOne({ identificacion }).select("+password");
+
+        return user;
+    }
 }
 
 module.exports = UserService;
