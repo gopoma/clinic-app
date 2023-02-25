@@ -27,7 +27,13 @@ const usuarioSchema = mongoose.Schema({
         type: String,
         enum: ["PACIENTE", "HOSPITAL"],
         default: "PACIENTE"
-    }
+    },
+    isEmailValid: {
+        type: Boolean,
+        default: false
+    },
+    emailValidationUUID: String,
+    emailValidationUUIDExpiration: Date
 }, { timestamps: true });
 usuarioSchema.plugin(uniqueValidator, {message: "{VALUE} ya ha sido registrado"});
 

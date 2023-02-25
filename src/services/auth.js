@@ -2,6 +2,7 @@ const UserService = require("./users");
 const { compare } = require("../libs/encryption");
 const jwt = require("jsonwebtoken");
 const { jwtSecret } = require("../config");
+const Email = require("../libs/email");
 
 class AuthService {
     async register(data) {
@@ -34,6 +35,18 @@ class AuthService {
                 messages: ["Las credenciales son incorrectas"]
             };
         }
+
+
+        try {
+            await new Email(user).sendWelcome();
+        } catch(error) {
+            console.log(error);
+            return {
+                success: false,
+                messages: ["Hubo un error al enviar el correo electrónico. ¡Inténtalo de nuevo más tarde!"]
+            };
+        }
+
 
         return this.#getUserData(user);
     }
