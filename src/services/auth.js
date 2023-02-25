@@ -1,5 +1,7 @@
 const UserService = require("./users");
 const { compare } = require("../libs/encryption");
+const jwt = require("jsonwebtoken");
+const { jwtSecret } = require("../config");
 
 class AuthService {
     async register(data) {
@@ -36,10 +38,29 @@ class AuthService {
         // Remove password from output
         user.password = undefined;
 
+        return this.#getUserData(user);
+    }
+
+    #getUserData(user) {
+        const userToTokenize = {
+            id: user.id,
+            role: user.role
+        };
+
+        const token = this.#createToken(userToTokenize);
         return {
             success: true,
-            user: user
+            user,
+            token
         };
+    }
+
+    #createToken(payload) {
+        const token = jwt.sign(payload, jwtSecret, {
+            expiresIn: "7d"
+        });
+
+        return token;
     }
 }
 

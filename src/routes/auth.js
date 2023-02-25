@@ -4,6 +4,7 @@ const validateSchema = require("../middlewares/validateSchema");
 const RegisterDTOSchema = require("../dtos/auth/register");
 const LoginDTOSchema = require("../dtos/auth/login");
 const status = require("http-status");
+const { tokenToCookie, deleteCookie } = require("../helpers/authResponse");
 
 
 function auth(app) {
@@ -22,7 +23,11 @@ function auth(app) {
     router.post("/login", validateSchema(LoginDTOSchema), async (req, res) => {
         const result = await authService.login(req.body);
 
-        return res.status(result.success ? status.ACCEPTED : status.UNAUTHORIZED).json(result);
+        return tokenToCookie(res, result, status.UNAUTHORIZED);
+    });
+
+    router.post("/logout", (req, res) => {
+        return deleteCookie(res);
     });
 }
 
