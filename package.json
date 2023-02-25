@@ -1,0 +1,42 @@
+{
+  "name": "clinic-app",
+  "version": "1.0.0",
+  "description": "Servicio web (API REST) que sirve endpoints para un sistema de gestión de historia clínica centralizada",
+  "main": "./src/index.js",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development npx nodemon ./src/index.js",
+    "start": "cross-env NODE_ENV=production node ./src/index.js"
+  },
+  "keywords": [],
+  "author": "Gustavo Eduardo Ordoño Poma",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^8.34.0",
+    "nodemon": "^2.0.20"
+  },
+  "dependencies": {
+    "@sinclair/typebox": "^0.25.24",
+    "ajv": "^8.12.0",
+    "ajv-errors": "^3.0.0",
+    "ajv-formats": "^2.1.1",
+    "ajv-keywords": "^5.1.0",
+    "bcrypt": "^5.1.0",
+    "compression": "^1.7.4",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "date-fns": "^2.29.3",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-rate-limit": "^6.7.0",
+    "helmet": "^6.0.1",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^6.10.0",
+    "mongoose-unique-validator": "^3.1.0",
+    "morgan": "^1.10.0",
+    "nodemailer": "^6.9.1",
+    "uuid": "^9.0.0",
+    "xss-clean": "^0.1.1"
+  }
+}
