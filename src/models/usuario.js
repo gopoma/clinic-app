@@ -24,20 +24,9 @@ const usuarioSchema = mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ["PACIENTE", "HOSPITAL", "MEDICO"],
+        enum: ["PACIENTE", "HOSPITAL"],
         default: "PACIENTE"
-    },
-    nombre: {
-        type: String,
-        required: true
-    },
-    direccion: {
-        pais: String,
-        estado: String,
-        ciudad: String,
-        distrito: String
-    },
-    birthday: Date
+    }
 }, { timestamps: true });
 usuarioSchema.plugin(uniqueValidator, {message: "{VALUE} ya ha sido registrado"});
 

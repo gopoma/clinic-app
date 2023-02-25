@@ -8,7 +8,9 @@ const mongoSanitize = require("express-mongo-sanitize");
 const morgan = require("morgan");
 const helmet = require("helmet");
 const xss = require("xss-clean");
+
 const { development, port } = require("./config");
+const auth = require("./routes/auth");
 
 // Starting express app
 const app = express();
@@ -57,6 +59,9 @@ app.get("/", (req, res) => {
         author: "Gustavo Eduardo Ordoño Poma"
     });
 });
+
+// Routes
+auth(app);
 
 app.all("*", (req, res) => {
     return res.status(404).json({
