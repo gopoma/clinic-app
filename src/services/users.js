@@ -6,6 +6,9 @@ class UserService {
         try {
             const user = await UsuarioModel.create(data);
 
+            // Remove password from output
+            user.password = undefined;
+
             return {
                 success: true,
                 user
