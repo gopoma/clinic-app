@@ -35,22 +35,23 @@ class AuthService {
             };
         }
 
-        // Remove password from output
-        user.password = undefined;
-
         return this.#getUserData(user);
     }
 
     #getUserData(user) {
         const userToTokenize = {
             id: user.id,
+            identificacion: user.identificacion,
+            email: user.email,
+            telefono: user.telefono,
             role: user.role
         };
 
         const token = this.#createToken(userToTokenize);
+
         return {
             success: true,
-            user,
+            user: userToTokenize,
             token
         };
     }

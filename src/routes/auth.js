@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const AuthService = require("../services/auth");
+const { protect } = require("../middlewares/auth");
 const validateSchema = require("../middlewares/validateSchema");
 const RegisterDTOSchema = require("../dtos/auth/register");
 const LoginDTOSchema = require("../dtos/auth/login");
@@ -28,6 +29,16 @@ function auth(app) {
 
     router.post("/logout", (req, res) => {
         return deleteCookie(res);
+    });
+
+    // Protect all routes after this middleware
+    router.use(protect);
+
+    router.get("/validate", (req, res) => {
+        return res.status(status.OK).json({
+            success: true,
+            user: req.user
+        });
     });
 }
 
