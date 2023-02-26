@@ -1,6 +1,8 @@
 require("dotenv").config();
 
 const config = {
+    backendURL: process.env.BACKEND_URL,
+    backendURLDev: process.env.BACKEND_URL_DEVELOPMENT,
     dbCNN: process.env.DB_CNN,
     development: process.env.NODE_ENV === "development",
     emailHost: process.env.EMAIL_HOST,

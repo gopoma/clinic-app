@@ -1,11 +1,21 @@
 const UserService = require("./users");
 const { compare } = require("../libs/encryption");
 const jwt = require("jsonwebtoken");
-const { jwtSecret } = require("../config");
+const uuid = require("uuid");
+const { addMinutes } = require("date-fns");
 const Email = require("../libs/email");
+const {
+    backendURL,
+    backendURLDev,
+    jwtSecret,
+    production
+} = require("../config");
 
 class AuthService {
     async register(data) {
+        data.emailValidationUUID = uuid.v4();
+        data.emailValidationUUIDExpiration = addMinutes(new Date(), 10);
+
         const userService = new UserService();
         const result = await userService.create(data);
 
@@ -16,9 +26,22 @@ class AuthService {
             };
         }
 
+
+        try {
+            await new Email(result.user, `${production ? backendURL : backendURLDev}/api/auth/verify/${data.emailValidationUUID}`).sendEmailVerification();
+        } catch(error) {
+            await userService.delete(result.user.id);
+
+            return {
+                success: false,
+                messages: ["Hubo un error en el momento de registrar al usuario. ¡Inténtalo de nuevo más tarde!"]
+            };
+        }
+
         return {
             success: true,
-            user: result.user
+            user: result.user,
+            messages: ["Completa tu registro a través del mensaje que enviamos a tu Correo Electrónico"]
         };
     }
 
@@ -35,18 +58,6 @@ class AuthService {
                 messages: ["Las credenciales son incorrectas"]
             };
         }
-
-
-        try {
-            await new Email(user, "https://www.twitch.tv/farfadoxvevo").sendEmailVerification();
-        } catch(error) {
-            console.log(error);
-            return {
-                success: false,
-                messages: ["Hubo un error al enviar el correo electrónico. ¡Inténtalo de nuevo más tarde!"]
-            };
-        }
-
 
         return this.#getUserData(user);
     }

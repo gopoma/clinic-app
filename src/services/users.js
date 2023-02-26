@@ -23,6 +23,24 @@ class UserService {
 
         return user;
     }
+
+    async delete(idUser) {
+        const user = await UsuarioModel.findById(idUser);
+
+        if(!user) {
+            return {
+                success: false,
+                messages: ["No existe un usuario por ese id"]
+            };
+        }
+
+        await UsuarioModel.findByIdAndDelete(idUser);
+
+        return {
+            success: true,
+            message: "Usuario eliminado"
+        };
+    }
 }
 
 module.exports = UserService;
