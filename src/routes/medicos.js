@@ -22,6 +22,7 @@ function medicos(app) {
             ...req.body,
             role: "MEDICO",
             isEmailValid: true,
+            needsPasswordReset: true,
             hospital: req.user.id
         });
 

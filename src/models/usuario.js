@@ -47,6 +47,10 @@ const usuarioSchema = mongoose.Schema({
     passwordChangedAt: Date,
     passwordResetToken: String,
     passwordResetTokenExpiration: Date,
+    needsPasswordReset: {
+        type: Boolean,
+        default: false
+    }
 }, { timestamps: true });
 usuarioSchema.plugin(uniqueValidator, {message: "{VALUE} ya ha sido registrado"});
 

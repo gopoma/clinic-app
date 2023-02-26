@@ -139,6 +139,7 @@ class AuthService {
         user.passwordResetToken = null;
         user.passwordResetTokenExpiration = null;
         user.passwordChangedAt = new Date();
+        user.needsPasswordReset = false;
 
         const result = await userService.update(user.id, user);
 
@@ -150,6 +151,7 @@ class AuthService {
         const user = await userService.getByEmail(email);
 
         user.password = await encrypt(newPassword);
+        user.needsPasswordReset = false;
 
         const result = await userService.update(user.id, user);
 
@@ -162,7 +164,8 @@ class AuthService {
             identificacion: user.identificacion,
             email: user.email,
             telefono: user.telefono,
-            role: user.role
+            role: user.role,
+            needsPasswordReset: user.needsPasswordReset
         };
 
         const token = this.#createToken(userToTokenize);
