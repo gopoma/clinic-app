@@ -18,6 +18,12 @@ class UserService {
         }
     }
 
+    async getByEmail(email) {
+        const user = await UsuarioModel.findOne({ email });
+
+        return user;
+    }
+
     async getByIdentificacion(identificacion) {
         const user = await UsuarioModel.findOne({ identificacion }).select("+password");
 

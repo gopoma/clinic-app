@@ -37,6 +37,12 @@ function auth(app) {
         return deleteCookie(res);
     });
 
+    router.post("/forgotPassword", async (req, res) => {
+        const result = await authService.forgotPassword(req.body.email);
+
+        return res.status(result.success ? status.ACCEPTED : status.BAD_REQUEST).json(result);
+    });
+
     // Protect all routes after this middleware
     router.use(protect);
 

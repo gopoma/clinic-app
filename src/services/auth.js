@@ -28,7 +28,8 @@ class AuthService {
 
 
         try {
-            await new Email(result.user, `${production ? backendURL : backendURLDev}/api/auth/verify/${data.emailValidationUUID}`).sendEmailVerification();
+            const validationURL = `${production ? backendURL : backendURLDev}/api/auth/verify/${data.emailValidationUUID}`;
+            await new Email(result.user, validationURL).sendEmailVerification();
         } catch(error) {
             await userService.delete(result.user.id);
 
@@ -57,8 +58,8 @@ class AuthService {
         }
 
         user.isEmailValid = true;
-        user.emailValidationUUID = null;
-        user.emailValidationUUIDExpiration = null;
+        user.emailValidationUUID = undefined;
+        user.emailValidationUUIDExpiration = undefined;
 
         const result = await userService.update(user.id, user);
 
@@ -87,6 +88,41 @@ class AuthService {
         }
 
         return this.#getUserData(user);
+    }
+
+    async forgotPassword(email) {
+        const userService = new UserService();
+        const user = await userService.getByEmail(email);
+
+        if(!user) {
+            return {
+                success: false,
+                messages: ["No hay ningún usuario con ese Correo Electrónico"]
+            };
+        }
+
+        user.passwordResetToken = uuid.v4();
+        user.passwordResetExpiration = addMinutes(new Date(), 10);
+        await userService.update(user.id, user);
+
+        try {
+            const resetURL = `${production ? backendURL : backendURLDev}/api/auth/resetPassword/${user.passwordResetToken}`;
+            await new Email(user, resetURL).sendPasswordReset();
+
+            return {
+                success: true,
+                message: "Se ha enviado el token de verificación a su Correo Electrónico!"
+            };
+        } catch(error) {
+            user.passwordResetToken = undefined;
+            user.passwordResetExpiration = undefined;
+            await userService.update(user);
+
+            return {
+                success: false,
+                messages: ["Hubo un error al enviar el correo electrónico. ¡Inténtalo de nuevo más tarde!"]
+            };
+        }
     }
 
     #getUserData(user) {

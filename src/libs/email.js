@@ -73,6 +73,13 @@ class Email {
             "Bienvenido a la familia de Clinic App!"
         );
     }
+
+    async sendPasswordReset() {
+        await this.send(
+            "passwordReset",
+            "Solicitud de cambio de contraseña en ClinicApp"
+        );
+    }
 }
 
 module.exports = Email;

@@ -33,7 +33,10 @@ const usuarioSchema = mongoose.Schema({
         default: false
     },
     emailValidationUUID: String,
-    emailValidationUUIDExpiration: Date
+    emailValidationUUIDExpiration: Date,
+    passwordChangedAt: Date,
+    passwordResetToken: String,
+    passwordResetExpiration: Date,
 }, { timestamps: true });
 usuarioSchema.plugin(uniqueValidator, {message: "{VALUE} ya ha sido registrado"});
 
