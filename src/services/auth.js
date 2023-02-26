@@ -59,6 +59,13 @@ class AuthService {
             };
         }
 
+        if(!user.isEmailValid) {
+            return {
+                success: false,
+                messages: ["Termine de crear su cuenta validando su Correo Electrónico"]
+            };
+        }
+
         return this.#getUserData(user);
     }
 
