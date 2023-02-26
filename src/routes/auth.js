@@ -4,6 +4,7 @@ const { protect } = require("../middlewares/auth");
 const validateSchema = require("../middlewares/validateSchema");
 const RegisterDTOSchema = require("../dtos/auth/register");
 const LoginDTOSchema = require("../dtos/auth/login");
+const ResetPasswordDTOSchema = require("../dtos/auth/reset-password");
 const status = require("http-status");
 const { tokenToCookie, deleteCookie, tokenToCookieAndRedirect } = require("../helpers/authResponse");
 
@@ -39,6 +40,12 @@ function auth(app) {
 
     router.post("/forgotPassword", async (req, res) => {
         const result = await authService.forgotPassword(req.body.email);
+
+        return res.status(result.success ? status.ACCEPTED : status.BAD_REQUEST).json(result);
+    });
+
+    router.patch("/resetPassword/:token", validateSchema(ResetPasswordDTOSchema), async (req, res) => {
+        const result = await authService.resetPassword(req.params.token, req.body.newPassword);
 
         return res.status(result.success ? status.ACCEPTED : status.BAD_REQUEST).json(result);
     });

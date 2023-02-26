@@ -39,6 +39,15 @@ class UserService {
         return user;
     }
 
+    async getByPasswordResetToken(passwordResetToken) {
+        const user = await UsuarioModel.findOne({
+            passwordResetToken,
+            passwordResetTokenExpiration: { $gt: Date.now() }
+        });
+
+        return user;
+    }
+
     async update(idUser, data) {
         const user = await UsuarioModel.findById(idUser);
 

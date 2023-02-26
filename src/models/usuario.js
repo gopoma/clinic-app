@@ -36,12 +36,12 @@ const usuarioSchema = mongoose.Schema({
     emailValidationUUIDExpiration: Date,
     passwordChangedAt: Date,
     passwordResetToken: String,
-    passwordResetExpiration: Date,
+    passwordResetTokenExpiration: Date,
 }, { timestamps: true });
 usuarioSchema.plugin(uniqueValidator, {message: "{VALUE} ya ha sido registrado"});
 
 
-usuarioSchema.pre("save", async function(next) {
+usuarioSchema.pre("save", async function doPasswordEncryption(next) {
     // Only run this function if password was actually modified
     if(!this.isModified("password")) {
         return next();

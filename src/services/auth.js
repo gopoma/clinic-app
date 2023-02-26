@@ -1,5 +1,5 @@
 const UserService = require("./users");
-const { compare } = require("../libs/encryption");
+const { encrypt, compare } = require("../libs/encryption");
 const jwt = require("jsonwebtoken");
 const uuid = require("uuid");
 const { addMinutes } = require("date-fns");
@@ -58,8 +58,8 @@ class AuthService {
         }
 
         user.isEmailValid = true;
-        user.emailValidationUUID = undefined;
-        user.emailValidationUUIDExpiration = undefined;
+        user.emailValidationUUID = null;
+        user.emailValidationUUIDExpiration = null;
 
         const result = await userService.update(user.id, user);
 
@@ -102,7 +102,7 @@ class AuthService {
         }
 
         user.passwordResetToken = uuid.v4();
-        user.passwordResetExpiration = addMinutes(new Date(), 10);
+        user.passwordResetTokenExpiration = addMinutes(new Date(), 10);
         await userService.update(user.id, user);
 
         try {
@@ -114,8 +114,8 @@ class AuthService {
                 message: "Se ha enviado el token de verificación a su Correo Electrónico!"
             };
         } catch(error) {
-            user.passwordResetToken = undefined;
-            user.passwordResetExpiration = undefined;
+            user.passwordResetToken = null;
+            user.passwordResetTokenExpiration = null;
             await userService.update(user);
 
             return {
@@ -123,6 +123,27 @@ class AuthService {
                 messages: ["Hubo un error al enviar el correo electrónico. ¡Inténtalo de nuevo más tarde!"]
             };
         }
+    }
+
+    async resetPassword(passwordResetToken, newPassword) {
+        const userService = new UserService();
+        const user = await userService.getByPasswordResetToken(passwordResetToken);
+
+        if(!user) {
+            return {
+                success: false,
+                messages: ["Es necesario un token válido o que no halla expirado aún"]
+            };
+        }
+
+        user.password = await encrypt(newPassword);
+        user.passwordResetToken = null;
+        user.passwordResetTokenExpiration = null;
+        user.passwordChangedAt = new Date();
+
+        const result = await userService.update(user.id, user);
+
+        return this.#getUserData(result.user);
     }
 
     #getUserData(user) {
