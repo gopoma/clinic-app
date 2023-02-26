@@ -35,7 +35,7 @@ const usuarioSchema = mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ["PACIENTE", "HOSPITAL"],
+        enum: ["PACIENTE", "HOSPITAL", "MEDICO"],
         default: "PACIENTE"
     },
     isEmailValid: {

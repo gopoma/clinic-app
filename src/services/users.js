@@ -1,5 +1,6 @@
 const PacienteService = require("./pacientes");
 const HospitalService = require("./hospitales");
+const MedicoService = require("./medicos");
 const UsuarioModel = require("../models/usuario");
 const handleDBExceptions = require("../helpers/handleDBExceptions");
 
@@ -27,6 +28,16 @@ class UserService {
                     };
 
                     await hospitalService.create(hospitalToStore);
+                    break;
+                }
+                case "MEDICO": {
+                    const medicoService = new MedicoService();
+                    const medicoToStore = {
+                        _id: user.id,
+                        hospital: data.hospital
+                    };
+
+                    await medicoService.create(medicoToStore);
                     break;
                 }
                 default:

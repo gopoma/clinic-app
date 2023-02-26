@@ -1,4 +1,5 @@
 const { Router } = require("express");
+const UserService = require("../services/users");
 const MedicoService = require("../services/medicos");
 const { protect, restrictTo } = require("../middlewares/auth");
 const status = require("http-status");
@@ -7,7 +8,7 @@ const CreateMedicoDTOSchema = require("../dtos/medicos/create");
 
 function medicos(app) {
     const router = Router();
-    const medicoService = new MedicoService();
+    const mekdicoService = new MedicoService();
 
     app.use("/api/medicos", router);
 
@@ -16,7 +17,12 @@ function medicos(app) {
     router.use(protect);
 
     router.post("/", restrictTo("HOSPITAL"), validateSchema(CreateMedicoDTOSchema), async (req, res) => {
-        const result = await medicoService.create(req.body);
+        const userService = new UserService();
+        const result = await userService.create({
+            ...req.body,
+            role: "MEDICO",
+            hospital: req.user.id
+        });
 
         return res.status(result.success ? status.CREATED : status.BAD_REQUEST).json(result);
     });

@@ -1,11 +1,10 @@
 const MedicoModel = require("../models/medico");
 
 class MedicoService {
-    async create() {
-        return {
-            success: true,
-            message: "In creating process..."
-        };
+    async create(data) {
+        const medico = await MedicoModel.create(data);
+
+        return medico;
     }
 }
 
