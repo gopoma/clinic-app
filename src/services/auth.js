@@ -160,6 +160,7 @@ class AuthService {
 
     #getUserData(user) {
         const userToTokenize = {
+            nombre: user.nombre,
             id: user.id,
             identificacion: user.identificacion,
             email: user.email,

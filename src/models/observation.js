@@ -2,6 +2,11 @@ const mongoose = require("mongoose");
 
 
 const observationSchema = mongoose.Schema({
+    hospital: {
+        required: true,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "hospital"
+    },
     medico: {
         required: true,
         type: mongoose.Schema.Types.ObjectId,

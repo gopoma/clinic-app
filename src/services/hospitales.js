@@ -6,6 +6,12 @@ class HospitalService {
 
         return hospital;
     }
+
+    async getByMedico(idMedico) {
+        const hospital = await HospitalModel.findOne({ medico: idMedico });
+
+        return hospital;
+    }
 }
 
 module.exports = HospitalService;

@@ -20,6 +20,12 @@ function observations(app) {
 
         return res.status(result.success ? status.CREATED : status.BAD_REQUEST).json(result);
     });
+
+    router.get("/", async (req, res) => {
+        const result = await observationService.getRelated(req.user.role, req.user.id);
+
+        return res.status(result.success ? status.OK : status.INTERNAL_SERVER_ERROR).json(result);
+    });
 }
 
 module.exports = observations;
