@@ -60,12 +60,12 @@ class Email {
         await transporter.sendMail(mailOptions);
     }
 
-    // async sendEmailVerification() {
-    //     await this.send(
-    //         "verification",
-    //         "Your email verification URL (valid for only 10 minutes)"
-    //     );
-    // }
+    async sendEmailVerification() {
+        await this.send(
+            "verification",
+            "Registro exitoso | Clinic App"
+        );
+    }
 
     async sendWelcome() {
         await this.send(

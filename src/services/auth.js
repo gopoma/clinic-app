@@ -38,7 +38,7 @@ class AuthService {
 
 
         try {
-            await new Email(user).sendWelcome();
+            await new Email(user, "https://www.twitch.tv/farfadoxvevo").sendEmailVerification();
         } catch(error) {
             console.log(error);
             return {
