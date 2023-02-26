@@ -1,3 +1,5 @@
+const PacienteService = require("./pacientes");
+const HospitalService = require("./hospitales");
 const UsuarioModel = require("../models/usuario");
 const handleDBExceptions = require("../helpers/handleDBExceptions");
 
@@ -6,8 +8,36 @@ class UserService {
         try {
             const user = await UsuarioModel.create(data);
 
-            // Remove password from output
+            switch(data.role) {
+                case "PACIENTE": {
+                    const pacienteService = new PacienteService();
+                    const pacienteToStore = {
+                        _id: user.id,
+                        birthday: data.birthday
+                    };
+
+                    await pacienteService.create(pacienteToStore);
+                    break;
+                }
+                case "HOSPITAL": {
+                    const hospitalService = new HospitalService();
+                    const hospitalToStore = {
+                        _id: user.id,
+                        services: data.services
+                    };
+
+                    await hospitalService.create(hospitalToStore);
+                    break;
+                }
+                default:
+            }
+
+            // Remove sensitive data from output
             user.password = undefined;
+            user.isEmailValid = undefined;
+            user.emailValidationUUID = undefined;
+            user.emailValidationUUIDExpiration = undefined;
+
 
             return {
                 success: true,

@@ -33,7 +33,7 @@ transporter.verify(function(error, success) {
 class Email {
     constructor(user, url = "") {
         this.to = user.email;
-        this.firstName = user?.nombre?.split(" ")[0] || "Messi";
+        this.firstName = user.nombre.split(" ")[0];
         this.url = url;
         this.from = `Gustavo Ordoño Poma <${emailFrom}>`;
     }

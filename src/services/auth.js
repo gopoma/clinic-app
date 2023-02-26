@@ -26,7 +26,6 @@ class AuthService {
             };
         }
 
-
         try {
             const validationURL = `${production ? backendURL : backendURLDev}/api/auth/verify/${data.emailValidationUUID}`;
             await new Email(result.user, validationURL).sendEmailVerification();
@@ -42,7 +41,7 @@ class AuthService {
         return {
             success: true,
             user: result.user,
-            messages: ["Completa tu registro a través del mensaje que enviamos a tu Correo Electrónico"]
+            message: "Completa tu registro a través del mensaje que enviamos a tu Correo Electrónico"
         };
     }
 

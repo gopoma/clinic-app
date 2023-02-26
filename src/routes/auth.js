@@ -34,7 +34,6 @@ function auth(app) {
                     targetSchema = HospitalRegisterDTOSchema;
                     break;
                 default:
-                    throw new Error("Unexpected role");
             }
 
             return validateSchema(targetSchema)(req, res, next);
