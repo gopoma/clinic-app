@@ -2,7 +2,11 @@ const { Router } = require("express");
 const AuthService = require("../services/auth");
 const { protect } = require("../middlewares/auth");
 const validateSchema = require("../middlewares/validateSchema");
-const RegisterDTOSchema = require("../dtos/auth/register");
+const {
+    RoleRegisterDTOSchema,
+    PacienteRegisterDTOSchema,
+    HospitalRegisterDTOSchema
+} = require("../dtos/auth/register");
 const LoginDTOSchema = require("../dtos/auth/login");
 const ResetPasswordDTOSchema = require("../dtos/auth/reset-password");
 const status = require("http-status");
@@ -16,11 +20,31 @@ function auth(app) {
     app.use("/api/auth", router);
 
 
-    router.post("/register", validateSchema(RegisterDTOSchema), async (req, res) => {
-        const result = await authService.register(req.body);
+    router.post("/register",
+        validateSchema(RoleRegisterDTOSchema),
+        // eslint-disable-next-line
+        (req, res, next) => {
+            let targetSchema;
 
-        return res.status(result.success ? status.CREATED : status.BAD_REQUEST).json(result);
-    });
+            switch(req.body.role) {
+                case "PACIENTE":
+                    targetSchema = PacienteRegisterDTOSchema;
+                    break;
+                case "HOSPITAL":
+                    targetSchema = HospitalRegisterDTOSchema;
+                    break;
+                default:
+                    throw new Error("Unexpected role");
+            }
+
+            return validateSchema(targetSchema)(req, res, next);
+        },
+        async (req, res) => {
+            const result = await authService.register(req.body);
+
+            return res.status(result.success ? status.CREATED : status.BAD_REQUEST).json(result);
+        }
+    );
 
     router.get("/verify/:emailVerificationUUID", async (req, res) => {
         const result = await authService.validateEmail(req.params.emailVerificationUUID);

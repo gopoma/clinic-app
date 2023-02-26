@@ -4,6 +4,16 @@ const { encrypt } = require("../libs/encryption");
 
 
 const usuarioSchema = mongoose.Schema({
+    nombre: {
+        type: String,
+        required: true
+    },
+    direccion: {
+        pais: String,
+        estado: String,
+        ciudad: String,
+        distrito: String
+    },
     identificacion: {
         type: String,
         required: true,
