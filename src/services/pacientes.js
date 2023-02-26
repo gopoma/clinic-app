@@ -6,6 +6,12 @@ class PacienteService {
 
         return paciente;
     }
+
+    async getById(idPaciente) {
+        const paciente = await PacienteModel.findById(idPaciente);
+
+        return paciente;
+    }
 }
 
 module.exports = PacienteService;
