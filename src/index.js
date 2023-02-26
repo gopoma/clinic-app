@@ -13,6 +13,7 @@ const status = require("http-status");
 const { development, port } = require("./config");
 const auth = require("./routes/auth");
 const medicos = require("./routes/medicos");
+const observations = require("./routes/observations");
 
 // Starting express app
 const app = express();
@@ -65,6 +66,7 @@ app.get("/", (req, res) => {
 // Routes
 auth(app);
 medicos(app);
+observations(app);
 
 app.all("*", (req, res) => {
     return res.status(status.NOT_FOUND).json({
