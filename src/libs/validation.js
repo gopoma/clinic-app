@@ -26,7 +26,8 @@ const ajv = new Ajv({ allErrors: true })
 addFormats(ajv, ["date", "email", "uri"])
     .addFormat("identificacion", /^[0-9]{8}$/)
     .addFormat("telefono", /^[0-9]{9}$/)
-    .addFormat("password", /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*$/);
+    .addFormat("password", /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*$/)
+    .addFormat("MongoId", /^[0-9a-fA-F]{24}$/);
 
 
 addErrors(ajv);
