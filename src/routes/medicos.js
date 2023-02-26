@@ -8,7 +8,7 @@ const CreateMedicoDTOSchema = require("../dtos/medicos/create");
 
 function medicos(app) {
     const router = Router();
-    const mekdicoService = new MedicoService();
+    const medicoService = new MedicoService();
 
     app.use("/api/medicos", router);
 
@@ -21,6 +21,7 @@ function medicos(app) {
         const result = await userService.create({
             ...req.body,
             role: "MEDICO",
+            isEmailValid: true,
             hospital: req.user.id
         });
 
