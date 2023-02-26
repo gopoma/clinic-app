@@ -19,6 +19,22 @@ function tokenToCookie(res = response, result, errCode) {
     }).status(status.ACCEPTED).json(data);
 }
 
+function tokenToCookieAndRedirect(res = response, result, errCode) {
+    if(!result.success) {
+        return res.status(errCode).json(result);
+    }
+
+
+    const { token } = result;
+
+    return res.cookie("token", token, {
+        httpOnly: true,
+        secure: production,
+        sameSite: "none",
+        expires: addDays(new Date(), 7)
+    }).redirect(production ? "https://heippi.com" : "http://localhost:3000");
+}
+
 function deleteCookie(res = response) {
     return res.cookie("token", "", {
         httpOnly: true,
@@ -34,5 +50,6 @@ function deleteCookie(res = response) {
 
 module.exports = {
     tokenToCookie,
+    tokenToCookieAndRedirect,
     deleteCookie
 };

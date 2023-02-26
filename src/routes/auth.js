@@ -5,7 +5,7 @@ const validateSchema = require("../middlewares/validateSchema");
 const RegisterDTOSchema = require("../dtos/auth/register");
 const LoginDTOSchema = require("../dtos/auth/login");
 const status = require("http-status");
-const { tokenToCookie, deleteCookie } = require("../helpers/authResponse");
+const { tokenToCookie, deleteCookie, tokenToCookieAndRedirect } = require("../helpers/authResponse");
 
 
 function auth(app) {
@@ -19,6 +19,12 @@ function auth(app) {
         const result = await authService.register(req.body);
 
         return res.status(result.success ? status.CREATED : status.BAD_REQUEST).json(result);
+    });
+
+    router.get("/verify/:emailVerificationUUID", async (req, res) => {
+        const result = await authService.validateEmail(req.params.emailVerificationUUID);
+
+        return tokenToCookieAndRedirect(res, result, status.BAD_REQUEST);
     });
 
     router.post("/login", validateSchema(LoginDTOSchema), async (req, res) => {

@@ -24,6 +24,33 @@ class UserService {
         return user;
     }
 
+    async getByEmailValidationUUID(emailValidationUUID) {
+        const user = await UsuarioModel.findOne({
+            emailValidationUUID,
+            emailValidationUUIDExpiration: { $gt: Date.now() }
+        });
+
+        return user;
+    }
+
+    async update(idUser, data) {
+        const user = await UsuarioModel.findById(idUser);
+
+        if(!user) {
+            return {
+                success: false,
+                messages: ["No existe un usuario por ese id"]
+            };
+        }
+
+        const updatedUser = await UsuarioModel.findByIdAndUpdate(idUser, data, { new: true });
+
+        return {
+            success: true,
+            user: updatedUser
+        };
+    }
+
     async delete(idUser) {
         const user = await UsuarioModel.findById(idUser);
 

@@ -14,7 +14,7 @@ const {
 class AuthService {
     async register(data) {
         data.emailValidationUUID = uuid.v4();
-        data.emailValidationUUIDExpiration = addMinutes(new Date(), 10);
+        data.emailValidationUUIDExpiration = addMinutes(new Date(), 25);
 
         const userService = new UserService();
         const result = await userService.create(data);
@@ -43,6 +43,26 @@ class AuthService {
             user: result.user,
             messages: ["Completa tu registro a través del mensaje que enviamos a tu Correo Electrónico"]
         };
+    }
+
+    async validateEmail(emailVerificationUUID) {
+        const userService = new UserService();
+        const user = await userService.getByEmailValidationUUID(emailVerificationUUID);
+
+        if(!user) {
+            return {
+                success: false,
+                messages: ["Es necesario un token válido o que no halla expirado aún"]
+            };
+        }
+
+        user.isEmailValid = true;
+        user.emailValidationUUID = null;
+        user.emailValidationUUIDExpiration = null;
+
+        const result = await userService.update(user.id, user);
+
+        return this.#getUserData(result.user);
     }
 
     async login(data) {
