@@ -50,6 +50,7 @@ function auth(app) {
         return res.status(result.success ? status.ACCEPTED : status.BAD_REQUEST).json(result);
     });
 
+
     // Protect all routes after this middleware
     router.use(protect);
 
@@ -58,6 +59,12 @@ function auth(app) {
             success: true,
             user: req.user
         });
+    });
+
+    router.patch("/updateMyPassword", async (req, res) => {
+        const result = await authService.updatePassword(req.user.email, req.body.newPassword);
+
+        return res.status(result.success ? status.ACCEPTED : status.BAD_REQUEST).json(result);
     });
 }
 

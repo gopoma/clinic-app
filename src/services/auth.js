@@ -146,6 +146,17 @@ class AuthService {
         return this.#getUserData(result.user);
     }
 
+    async updatePassword(email, newPassword) {
+        const userService = new UserService();
+        const user = await userService.getByEmail(email);
+
+        user.password = await encrypt(newPassword);
+
+        const result = await userService.update(user.id, user);
+
+        return this.#getUserData(result.user);
+    }
+
     #getUserData(user) {
         const userToTokenize = {
             id: user.id,
