@@ -5,7 +5,7 @@
   "main": "./src/index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development npx nodemon ./src/index.js",
-    "build": "echo Executing Something... && chmod +x install_phantomjs.sh && ./install_phantomjs.sh",
+    "build": "chmod +x install_phantomjs.sh && ./install_phantomjs.sh && npm link html-pdf && npm link phantomjs-prebuilt",
     "start": "cross-env NODE_ENV=production node ./src/index.js"
   },
   "keywords": [],
