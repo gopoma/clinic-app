@@ -6,7 +6,7 @@ Developers' projects built with Node.js, Express.js, MongoDB, Mongoose, Ajv, Pug
 
 ### API Documentation
 
-[Postman Documentation](https://documenter.getpostman.com/view/23241848/2s93CPrYGD#73ab8bc9-e8a7-4ec4-b6d7-4f9082f40d11)
+[Postman Documentation](https://documenter.getpostman.com/view/23241848/2s93CPrYGD)
 
 ### Getting Started
 
