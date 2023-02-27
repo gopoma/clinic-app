@@ -15,6 +15,7 @@ class ReportService {
 
         const config = {
             "format": "A4",
+            "phantomPath": "./node_modules/phantomjs/bin/phantomjs"
         };
         pdf.create(html, config).toStream(function(err, stream){
             if(err) {
