@@ -5,7 +5,7 @@
   "main": "./src/index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development npx nodemon ./src/index.js",
-    "build": "npm link html-pdf && npm link phantomjs-prebuilt",
+    "build": "npm install phantomjs-prebuilt --phantomjs_cdnurl=http://cnpmjs.org/downloads",
     "start": "cross-env NODE_ENV=production node ./src/index.js"
   },
   "keywords": [],
