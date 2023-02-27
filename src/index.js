@@ -14,6 +14,7 @@ const { development, port } = require("./config");
 const auth = require("./routes/auth");
 const medicos = require("./routes/medicos");
 const observations = require("./routes/observations");
+const pacientes = require("./routes/pacientes");
 
 // Starting express app
 const app = express();
@@ -67,6 +68,7 @@ app.get("/", (req, res) => {
 auth(app);
 medicos(app);
 observations(app);
+pacientes(app);
 
 app.all("*", (req, res) => {
     return res.status(status.NOT_FOUND).json({

@@ -61,7 +61,7 @@ class ObservationService {
         let observations;
         switch(role) {
             case "PACIENTE": {
-                observations = await this.#getRelatedToPaciente(id);
+                observations = await this.getRelatedToPaciente(id);
                 break;
             }
             case "MEDICO": {
@@ -81,7 +81,7 @@ class ObservationService {
         };
     }
 
-    async #getRelatedToPaciente(idPaciente) {
+    async getRelatedToPaciente(idPaciente) {
         const observations = await ObservationModel.find({ paciente: idPaciente }).populate(populationOptions);
 
         return observations;
